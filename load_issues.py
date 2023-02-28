@@ -26,9 +26,9 @@ def get_issues_query(cursor):
             ... on Issue {
             id
             title
+            bodyText
             state
             resourcePath
-            state
             createdAt
             updatedAt
             milestone{
@@ -131,11 +131,12 @@ def writeIssues(issuewriter, edges):
         id = node['id']
         title = node['title']
         state = node['state']
+        bodyText = node['bodyText']
         fields = readFields(node)
         resourcePath = node['resourcePath']
         labels = readLabels(node)
         milestone = readMilestone(node)
-        issuewriter.writerow([id, title, fields, resourcePath, labels, milestone, state])
+        issuewriter.writerow([id, title, bodyText, fields, resourcePath, labels, milestone, state])
 
 with open('issues.csv', 'w', newline='') as csvfile:
     issuewriter = csv.writer(csvfile, delimiter=';')
@@ -157,4 +158,3 @@ with open('issues.csv', 'w', newline='') as csvfile:
         cursor = searchNode['pageInfo']['endCursor']
         edges = searchNode['edges']
         writeIssues(issuewriter, edges)
-
