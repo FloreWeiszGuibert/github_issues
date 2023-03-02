@@ -115,6 +115,10 @@ def readFields(edgesNode):
                             result[name] = value
     return json.dumps(result)
 
+def readBodyText(node):
+    res = node['bodyText']
+    return repr(res)
+
 def readLabels(node):
     res = node['labels']['nodes']
     return json.dumps(res)
@@ -131,12 +135,12 @@ def writeIssues(issuewriter, edges):
         id = node['id']
         title = node['title']
         state = node['state']
-        bodyText = node['bodyText']
         fields = readFields(node)
         resourcePath = node['resourcePath']
         labels = readLabels(node)
         milestone = readMilestone(node)
-        issuewriter.writerow([id, title, bodyText, fields, resourcePath, labels, milestone, state])
+        bodyText = readBodyText(node)
+        issuewriter.writerow([id, title, fields, resourcePath, labels, milestone, state, bodyText])
 
 with open('issues.csv', 'w', newline='') as csvfile:
     issuewriter = csv.writer(csvfile, delimiter=';')
